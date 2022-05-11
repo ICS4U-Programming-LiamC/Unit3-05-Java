@@ -59,7 +59,7 @@ public class StudentGenerator {
 
     // gets the student to edit
     while (true) {
-      System.out.println("Which student would you like to edit?");
+      System.out.println("Which student would you like to edit/delete?");
 
       for (int i = 0; i < studentList.size(); i++) {
         if (studentList.size() < i) {
@@ -80,7 +80,6 @@ public class StudentGenerator {
 
       // if there is 1 student with that first name
       if (numStudents.size() == 1) {
-        System.out.println("You are editing " + studentList.get(numStudents.get(0)).firstName);
         return numStudents.get(0);
 
         // if there is more than one student with that first name
@@ -99,7 +98,6 @@ public class StudentGenerator {
         // return the index of the student to edit
         for (int i = 0; i < numStudents.size(); i++) {
           if (userInput.equals((studentList.get(numStudents.get(i)).lastName).toLowerCase())) {
-            System.out.println("You are editing " + studentList.get(numStudents.get(i)).lastName);
             return numStudents.get(i);
           }
         }
@@ -152,18 +150,22 @@ public class StudentGenerator {
     // students editor
     while (true) {
       System.out.println("Would you like to edit these students? (y/n) or view students? (view)");
+      System.out.println("Input 'new' to create a student and 'delete' to remove one");
       userInput = scanner.nextLine().toLowerCase();
+
       if (userInput.equals("y")) {
         int whichStu;
 
         // gets the student to edit, moved to a funtion as it got pretty complicated
         whichStu = getStudent(studentList);
+        System.out.println("You are editing " + studentList.get(whichStu).firstName 
+            + " " + studentList.get(whichStu).lastName);
 
         // gets the property to edit
         while (true) {
           System.out.println("\nWhich property would you like to edit?");
           System.out.println("First, middle, last,");
-          System.out.println("Grade, or IEP.\n");
+          System.out.println("grade, or IEP.\n");
 
           userInput = scanner.nextLine().toLowerCase();
 
@@ -176,7 +178,7 @@ public class StudentGenerator {
 
             // change the middle name, or simply remove it
           } else if (userInput.equals("middle")) {
-            System.out.println("Please input new middle name. Input none for no middle name");
+            System.out.println("Please input new middle name. Input none for no middle name.");
             userInput = scanner.nextLine();
 
             if (userInput.equals("none") || userInput.equals("None")) {
@@ -221,17 +223,18 @@ public class StudentGenerator {
             break;
 
             // gets true of false for the IEP of the student
-          } else if (userInput.equals("IEP")) {
+          } else if (userInput.equals("iep")) {
             boolean IEPBool;
+            System.out.println("Please input true/false");
             while (true) {
-              System.out.println("Please input true/false");
               userInput = scanner.nextLine();
 
               try {
                 IEPBool = Boolean.parseBoolean(userInput);
+                System.out.println(IEPBool);
                 break;
               } catch (Exception e) {
-                continue;
+                System.out.println("Please input true/false");
               }
             }
 
@@ -253,6 +256,65 @@ public class StudentGenerator {
         for (int i = 0; i < studentList.size(); i++) {
           studentList.get(i).print();
         }
+
+        // student creator
+      } else if (userInput.equals("new") || userInput.equals("create")) {
+        System.out.println("Please input: first, middle, last, grade, and IEP");
+        System.out.println("Be sure to capitalize, input (none) for no middle name");
+        System.out.println("Input a natural number for grade, and true or false for IEP");
+
+        // gets all necessary inputs from the user, then creates a student object
+        // it then adds this student to the list of other students
+        System.out.print("\nFirst: ");
+        String first;
+        first = scanner.nextLine();
+
+        System.out.print("\nMiddle: ");
+        String middle = scanner.nextLine();
+
+        if (middle.equals("none") || middle.equals("None")) {
+          middle = "N.M.N";
+        } else {
+          middle = middle.substring(0, 1);
+          middle.toUpperCase();
+        }
+
+        System.out.print("\nLast: ");
+        String last = scanner.nextLine();
+        int grade;
+        while (true) {
+        
+          System.out.print("\nGrade: ");
+          String gradeStr = scanner.nextLine();
+          try {
+            grade = Integer.parseInt(gradeStr);
+            break;
+          } catch (NumberFormatException e) {
+            System.out.println("Please input a natural number for grade");
+          }
+        }
+
+        boolean IEPBool;
+        while (true) {
+          System.out.print("\nIEP: ");
+          String IEPStr = scanner.nextLine();
+
+          try {
+            IEPBool = Boolean.parseBoolean(IEPStr);
+            break;
+          } catch (NumberFormatException e) {
+            System.out.println("Please input either 'true' or 'false' for IEP");
+          }
+        }
+
+        student = new Student(first, middle, last, grade, IEPBool);
+        studentList.add(student);
+
+        // deletes the requested student from the list of students
+      } else if (userInput.equals("delete") || userInput.equals("remove")) {
+        int stuDelete = getStudent(studentList);
+
+        studentList.remove(stuDelete);
 
       } else {
         System.out.println("Please enter either 'y' or 'n'");
