@@ -230,6 +230,8 @@ public class StudentGenerator {
               userInput = scanner.nextLine();
 
               try {
+                // will only return true if user input is true
+                // otherwise it will return false
                 IEPBool = Boolean.parseBoolean(userInput);
                 System.out.println(IEPBool);
                 break;
